@@ -2,26 +2,43 @@ import { supabase } from '@/lib/supabase';
 import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
-// Get all comments for a post
+// GET: Fetch all comments
 export async function GET(req, { params }) {
-  const { data } = await supabase
+  const { id } = await params; // Must await params in modern Next.js
+  
+  const { data, error } = await supabase
     .from('comments')
     .select('*, profiles(username, avatar_url)')
-    .eq('post_id', params.id)
+    .eq('post_id', id)
     .order('created_at', { ascending: false });
-  return NextResponse.json(data);
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+  return NextResponse.json(data || []);
 }
 
-// Post a new comment
+// POST: Save a new comment
 export async function POST(req, { params }) {
   const { userId } = await auth();
+  const { id } = await params;
+  
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { content } = await req.json();
+  
   const { data, error } = await supabase
     .from('comments')
-    .insert([{ post_id: params.id, user_id: userId, content }])
-    .select();
+    .insert([{ 
+      post_id: id, 
+      author_id: userId, // Changed from user_id to author_id to match your DB
+      content 
+    }])
+    .select()
+    .single(); // Get the single object back instead of an array
 
-  return NextResponse.json(data[0]);
+  if (error) {
+    console.error("Supabase Error:", error);
+    return NextResponse.json({ error: error.message }, { status: 400 });
+  }
+
+  return NextResponse.json(data);
 }

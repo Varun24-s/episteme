@@ -4,7 +4,7 @@ import CommentSection from "@/components/CommentSection";
 import { notFound } from "next/navigation";
 
 export default async function BlogPostPage({ params }) {
-  const { slug } = params;
+  const { slug } = await params;
 
   // Fetch the post and the author's profile details in one go
   const { data: post, error } = await supabase
@@ -33,7 +33,7 @@ export default async function BlogPostPage({ params }) {
           {post.title}
         </h1>
         
-        <div className="flex items-center justify-center gap-3">
+        {/* <div className="flex items-center justify-center gap-3">
           <img 
             src={post.profiles?.avatar_url} 
             alt={post.profiles?.username}
@@ -49,7 +49,7 @@ export default async function BlogPostPage({ params }) {
               })}
             </p>
           </div>
-        </div>
+        </div> */}
       </header>
 
       {/* Cover Image */}
