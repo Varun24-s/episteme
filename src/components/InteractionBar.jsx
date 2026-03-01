@@ -18,9 +18,6 @@ export default function InteractionBar({ postId }) {
       <button onClick={handleLike} className={`flex items-center gap-2 ${liked ? 'text-red-500' : ''}`}>
         <Heart fill={liked ? "currentColor" : "none"} size={20} /> Like
       </button>
-      <div className="flex items-center gap-2 text-gray-500">
-        <MessageCircle size={20} /> Comment
-      </div>
     </div>
   );
 }
