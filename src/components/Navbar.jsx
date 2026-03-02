@@ -64,7 +64,7 @@ export default function Navbar() {
                         </SignedOut>
 
                         <SignedIn>
-                            <Link href="/studio" className="flex items-center gap-2 text-sm font-bold text-black md:text-gray-400 hover:text-black transition-colors group">
+                            <Link href="/studio" className="flex items-center gap-2 text-sm font-bold text-black  transition-colors group">
                                 <Feather size={20} className="group-hover:-translate-y-0.5 transition-transform" />
                                 <span className="hidden sm:inline">Write</span>
                             </Link>
