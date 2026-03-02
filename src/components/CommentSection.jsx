@@ -59,7 +59,7 @@ export default function CommentSection({ postId }) {
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
-        <button onClick={postComment} className="bg-black text-white px-4 py-1 rounded-full text-sm">Post</button>
+        <button onClick={postComment} className="bg-black cursor-pointer text-white px-4 py-1 rounded-full text-sm">Post</button>
       </div>
       {comments?.map(c => (
         <div key={c.id} className="text-sm border-l-2 pl-4 py-1">

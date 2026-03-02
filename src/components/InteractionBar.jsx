@@ -14,7 +14,7 @@ export default function InteractionBar({ postId }) {
   };
 
   return (
-    <div className="flex gap-6 py-4 border-y border-gray-100 my-8">
+    <div className="flex gap-6 py-4 ">
       <button onClick={handleLike} className={`flex items-center gap-2 ${liked ? 'text-red-500' : ''}`}>
         <Heart fill={liked ? "currentColor" : "none"} size={20} /> Like
       </button>
