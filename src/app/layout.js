@@ -1,6 +1,8 @@
 import Navbar from "@/components/Navbar";
 import Providers from "@/components/Providers"; // Import what we just made
 import "./globals.css";
+import ScrollToTop from "@/components/ScrollToTop";
+import PageTransition from "@/components/PageTransition";
 
 // ✅ This will now work perfectly because this is a Server Component
 export const metadata = {
@@ -16,9 +18,14 @@ export default function RootLayout({ children }) {
         {/* The favicon is handled automatically by Next.js if placed in /app */}
       </head>
       <body>
+        <ScrollToTop />
         <Providers>
           <Navbar />
-          {children}
+          <PageTransition>
+            <main className="relative min-h-screen">
+              {children}
+            </main>
+          </PageTransition>
         </Providers>
       </body>
     </html>

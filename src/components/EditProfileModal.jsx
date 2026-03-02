@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { PenLine } from "lucide-react";
 
 export default function EditProfileModal({ profile }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +17,7 @@ export default function EditProfileModal({ profile }) {
     router.refresh();
   };
 
-  if (!isOpen) return <button onClick={() => setIsOpen(true)} className="text-sm font-bold underline">Edit Bio</button>;
+  if (!isOpen) return <button onClick={() => setIsOpen(true)} className="text-sm font-bold underline"><PenLine className="cursor-pointer"/></button>;
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
@@ -28,8 +29,8 @@ export default function EditProfileModal({ profile }) {
           onChange={(e) => setBio(e.target.value)}
         />
         <div className="flex gap-2 mt-4">
-          <button onClick={save} className="flex-1 bg-black text-white py-2 rounded-xl">Save</button>
-          <button onClick={() => setIsOpen(false)} className="flex-1 bg-gray-100 py-2 rounded-xl">Cancel</button>
+          <button onClick={save} className="flex-1 bg-black cursor-pointer text-white py-2 rounded-xl">Save</button>
+          <button onClick={() => setIsOpen(false)} className="flex-1 cursor-pointer bg-gray-100 py-2 rounded-xl">Cancel</button>
         </div>
       </div>
     </div>

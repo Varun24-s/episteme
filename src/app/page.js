@@ -21,7 +21,7 @@ export default async function HomePage() {
   return (
     <main className="max-w-7xl mx-auto px-6 py-12">
       {/* Hero Section */}
-      <section className="mb-20 mt-10 text-center md:text-left">
+      <section className="mb-20 mt-10 text-left">
         <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-none mb-6">
           STAY <br /> CURIOUS.
         </h1>
@@ -47,19 +47,19 @@ export default async function HomePage() {
           <div className="flex flex-col items-center justify-center py-40 border-2 border-dashed rounded-[40px] bg-gray-50">
             <p className="text-gray-400 italic mb-4">The feed is empty... for now.</p>
             <SignedIn>
-    <Link href="/studio" className="text-blue-600 font-bold underline">
-      Be the first to write a story
-    </Link>
-  </SignedIn>
+              <Link href="/studio" className="text-blue-600 font-bold underline">
+                Be the first to write a story
+              </Link>
+            </SignedIn>
 
-  {/* If Signed Out: Trigger the Login Modal */}
-  <SignedOut>
-    <SignInButton mode="modal">
-      <button className="text-blue-600 font-bold underline">
-        Be the first to write a story
-      </button>
-    </SignInButton>
-  </SignedOut>
+            {/* If Signed Out: Trigger the Login Modal */}
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button className="text-blue-600 font-bold underline">
+                  Be the first to write a story
+                </button>
+              </SignInButton>
+            </SignedOut>
           </div>
         )}
       </section>

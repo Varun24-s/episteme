@@ -1,33 +1,25 @@
 import { supabase } from "@/lib/supabase";
 import PostCard from "@/components/PostCard";
-import EditProfileModal from "@/components/EditProfileModal";
-import ProfileAvatar from "@/components/ProfileAvatar"; // Import your new component
+import EditProfileModal from "@/components/EditProfileModal"; // We will wrap the bio in this
+import ProfileAvatar from "@/components/ProfileAvatar";
 import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
+import { Calendar, BookOpen, PenLine } from "lucide-react"; 
 
-// Force fresh data on every visit
 export const revalidate = 0;
 
 export default async function ProfilePage({ params }) {
-    // 1. Await the dynamic parameters from the URL
     const { id } = await params;
-    
-    // 2. Get the currently logged-in user from the server
     const { userId: currentUserId } = await auth();
 
-    // 3. Fetch Profile Details from Supabase
     const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("*")
         .eq("id", id)
         .single();
 
-    if (profileError || !profile) {
-        console.error("Profile not found for ID:", id);
-        notFound();
-    }
+    if (profileError || !profile) notFound();
 
-    // 4. Fetch all posts written by this user
     const { data: posts } = await supabase
         .from("posts")
         .select("*, profiles(username, avatar_url)")
@@ -37,51 +29,65 @@ export default async function ProfilePage({ params }) {
     const isOwnProfile = currentUserId === id;
 
     return (
-        <main className="max-w-5xl mx-auto px-4 py-16">
-            <section className="flex flex-col items-center text-center border-b border-gray-100 pb-16 mb-16">
+        <main className="max-w-6xl mx-auto px-6 py-12 md:py-24">
+            <section className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-10 md:gap-16 items-start border-b border-gray-50 pb-10 mb-10">
                 
-                {/* 5. Use the Client Component for the interactive Avatar */}
-                <ProfileAvatar profile={profile} isOwnProfile={isOwnProfile} />
-
-                <h1 className="text-4xl font-black tracking-tight mb-3">
-                    {profile.username}
-                </h1>
-
-                <p className="text-gray-500 max-w-lg text-lg leading-relaxed mb-6">
-                    {profile.bio || "This storyteller hasn't added a bio yet."}
-                </p>
-
-                <div className="flex items-center gap-6 text-sm font-bold uppercase tracking-widest text-gray-400">
-                    <span>{posts?.length || 0} Stories</span>
-                    <span>•</span>
-                    <span>Joined {new Date(profile.updated_at).getFullYear()}</span>
+                <div className="flex flex-col items-center md:items-start">
+                    <ProfileAvatar profile={profile} isOwnProfile={isOwnProfile} />
                 </div>
 
-                {isOwnProfile && (
-                    <div className="mt-8">
-                        <EditProfileModal profile={profile} />
+                <div className="flex flex-col text-center md:text-left">
+                    <div className="flex flex-col md:flex-row md:items-end gap-4 mb-6">
+                        <h1 className="text-5xl md:text-7xl font-black tracking-tighter leading-none">
+                            {profile.username}
+                        </h1>
                     </div>
-                )}
+
+                    {/* BIO SECTION WITH INLINE PEN */}
+                    <div className="relative group max-w-2xl mb-8">
+                        <p className="text-xl md:text-2xl font-serif text-gray-600 leading-relaxed inline">
+                            {profile.bio || "A quiet observer of the digital age, yet to pen a manifesto."}
+                        </p>
+                        
+                        {isOwnProfile && (
+                            <div className="inline-block ml-3 align-middle">
+                                <EditProfileModal profile={profile}>
+                                    <button className="p-2 hover:bg-gray-50 rounded-full text-gray-300 hover:text-black transition-all duration-300">
+                                        <PenLine size={18} strokeWidth={1.2} />
+                                    </button>
+                                </EditProfileModal>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="flex flex-wrap justify-center md:justify-start items-center gap-x-8 gap-y-4 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400">
+                        <div className="flex items-center gap-2">
+                            <BookOpen size={14} strokeWidth={2.5} />
+                            <span>{posts?.length || 0} Stories</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Calendar size={14} strokeWidth={2.5} />
+                            <span>Joined {new Date(profile.updated_at).getFullYear()}</span>
+                        </div>
+                    </div>
+                </div>
             </section>
 
+            {/* Stories Grid Remains the same... */}
             <section>
-                <div className="flex items-center justify-between mb-10">
-                    <h2 className="text-2xl font-black italic">Latest Stories</h2>
+                <div className="flex items-baseline justify-between mb-12 border-b border-black pb-4">
+                    <h2 className="text-3xl font-black tracking-tighter uppercase">Your Stories</h2>
                 </div>
 
                 {posts && posts.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
-                        {posts.map((post) => (
-                            <PostCard key={post.id} post={post} />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+                        {posts.map((post, index) => (
+                            <PostCard key={post.id} post={post} index={index} />
                         ))}
                     </div>
                 ) : (
-                    <div className="py-20 text-center bg-gray-50 rounded-[40px] border-2 border-dashed border-gray-200">
-                        <p className="text-gray-400 font-medium italic">
-                            {isOwnProfile
-                                ? "You haven't published any stories yet."
-                                : "This user hasn't published anything yet."}
-                        </p>
+                    <div className="py-32 text-center bg-gray-50/50 rounded-[40px] border border-gray-100 italic font-serif text-gray-300 text-xl">
+                        Library is empty.
                     </div>
                 )}
             </section>
