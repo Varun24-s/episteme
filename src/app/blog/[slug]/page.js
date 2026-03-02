@@ -26,7 +26,7 @@ export default async function BlogPostPage({ params }) {
 
   // Construct the absolute URL for sharing
   // Replace 'https://yourapp.com' with your actual production domain later
-  const postUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://epistemeblogg.netlify.app/'}/post/${post.slug}`;
+  const postUrl = `${'https://epistemeblogg.netlify.app'}/post/${post.slug}`;
 
   return (
     <main className="max-w-3xl mx-auto px-4 py-20">
