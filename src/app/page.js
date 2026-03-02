@@ -3,6 +3,8 @@ import PostCard from "@/components/PostCard";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 
+export const revalidate = 0; // Revalidate every reload
+
 export default async function HomePage() {
   // Fetch all published posts including author details from the profiles table
   const { data: posts, error } = await supabase
